@@ -47,8 +47,8 @@ class Apple extends ActiveRecord
             [['coordinate_x', 'coordinate_y', 'status', 'percent'], 'integer'],
             [['appearance_date', 'fall_date'], 'safe'],
             [['color'], 'string', 'max' => 6],
-            [['id'], 'integer',  'max' => 99999999999],
-            [['percent'], 'integer',  'min' => '0', 'max' => 100],
+            [['id'], 'integer', 'max' => 99999999999],
+            [['percent'], 'integer', 'min' => '0', 'max' => 100],
         ];
     }
 

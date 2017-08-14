@@ -7,7 +7,7 @@ use backend\models\Apple;
 
 class GroundEater
 {
-    const ROTTED_TIME   = 5 * 60 * 60;
+    const ROTTED_TIME = 5 * 60 * 60;
 
     protected $apple;
     protected $post;
@@ -18,9 +18,10 @@ class GroundEater
         $this->post = $post;
     }
 
-    public function eat($percent){
+    public function eat($percent)
+    {
         $valid = $this->validate($percent);
-        if($valid){
+        if ($valid) {
             $this->apple->percent -= $percent;
             $this->apple->save(false);
             return true;
@@ -28,8 +29,9 @@ class GroundEater
         return false;
     }
 
-    public function validate($percent){
-        $isValidTotal =  $this->_defaultValidate() * $this->_groundStatusValidate() * $this->_groundPercentValidate($percent);
+    public function validate($percent)
+    {
+        $isValidTotal = $this->_defaultValidate() * $this->_groundStatusValidate() * $this->_groundPercentValidate($percent);
         return $isValidTotal;
     }
 
@@ -50,13 +52,13 @@ class GroundEater
     protected function _groundStatusValidate()
     {
         if ($this->apple->status !== Apple::STATUS_ON_GROUND) {
-            $this->apple->addError('percent', "Я не могу есть яблоки не на земле" );
+            $this->apple->addError('percent', "Я не могу есть яблоки не на земле");
             return false;
         }
 
         $rottedDate = strtotime($this->apple->fall_date) + self::ROTTED_TIME;
         if ($this->apple->status === Apple::STATUS_ON_GROUND && $rottedDate < time()) {
-            $this->apple->addError('percent', "Я не могу есть гнилые яблоки" );
+            $this->apple->addError('percent', "Я не могу есть гнилые яблоки");
             return false;
         }
 
@@ -66,7 +68,7 @@ class GroundEater
     protected function _groundPercentValidate($percent)
     {
         if ($this->apple->percent < $percent) {
-            $this->apple->addError('percent', "Нельзя съесть $percent % яблока, осталось только ".$this->apple->percent." %");
+            $this->apple->addError('percent', "Нельзя съесть $percent % яблока, осталось только " . $this->apple->percent . " %");
             return false;
         }
 

@@ -1,10 +1,12 @@
-.applet_tree{
+.applet_tree {
     text-align: center;
 }
+
 .apple_position {
     position: absolute !important;
 }
-.apple{
+
+.apple {
     height: 30px;
     width: 30px;
     border-radius: 30px;
@@ -12,6 +14,7 @@
     border: 1px solid #66512c;
     color: #00aa00;
 }
+
 .apple .caret {
     margin-top: -10px;
     margin-left: 5px;
@@ -21,10 +24,12 @@
     padding: 10px !important;
     text-align: center !important;
 }
-.apples_on_ground{
+
+.apples_on_ground {
     margin-top: -30px;
     margin-bottom: 30px;
 }
+
 .apple_generate_container {
     text-align: center;
     padding-top: 10px;

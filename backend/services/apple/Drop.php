@@ -6,7 +6,8 @@ use backend\models\Apple;
 
 class Drop
 {
-    static public function fallById($id){
+    static public function fallById($id)
+    {
         $apple = Apple::findOne($id);
 
         if ($apple->status !== Apple::STATUS_ON_TREE) {

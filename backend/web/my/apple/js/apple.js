@@ -1,4 +1,3 @@
-
 function apple_eat(form) {
     var appleId = $(form).find('.apple_id').val();
     var data = form.serialize();
@@ -7,7 +6,7 @@ function apple_eat(form) {
         url: "/apple-tree/eat",
         data: data,
         success: function (msg) {
-            if(msg === 'done'){
+            if (msg === 'done') {
                 $("#apple_" + appleId).hide();
             }
             $("#apple_" + appleId).find('.dropdown-menu').html(msg);
