@@ -30,7 +30,11 @@ class AppleWidget extends Widget
                 $returnHtml .= '<b class="caret"></b>';
                 $returnHtml .= '<span>'.$this->apple->getSize().'</span>';
             $returnHtml .= '</a>';
-            $returnHtml .= '<ul class="dropdown-menu" role="menu"> test';
+            $returnHtml .= '<ul class="dropdown-menu" role="menu">';
+                $returnHtml .= '<li><input type="button" class="btn" onclick="appletree_drop('. $this->apple->id .')" value="Сбросить"></li>';
+                $returnHtml .= '<li class="eatForm">';
+                $returnHtml .= AppleEatWidget::widget(['apple' => $this->apple] );
+                $returnHtml .= '</li>';
             $returnHtml .= '</ul>';
         $returnHtml .= '</span>';
 
