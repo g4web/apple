@@ -2,49 +2,68 @@
 
 namespace backend\controllers;
 
+use backend\services\apple\Delete as AppleDelete;
+use backend\services\apple\GroundEater as AppleGroundEater;
+use backend\services\apple\RandomGenerator as AppleRandomGenerator;
 use \yii\web\Controller;
 use backend\models\Apple;
-use backend\models\AppleEaterGround;
+use backend\services\apple\Drop as AppleDrop;
 use Yii;
+use yii\filters\AccessControl;
 
 class AppleTreeController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionDrop()
     {
         $id = Yii::$app->request->post('id');
-        $apple = Apple::findOne($id);
-        $apple->fallToGround();
-        if($apple->validate()){
-            $apple->save(false);
-        }
+        $apple = AppleDrop::fallById($id);
+        return $this->renderAjax('_appleAction',[
+            'apple' => $apple
+        ]);
     }
 
     public function actionEat()
     {
-        $post = Yii::$app->request->post('Apple');
-        $appleRequest = Apple::findOne($post['id']);
-        $appleRequest->load(Yii::$app->request->post(), 'Apple');
-        $valid = $appleRequest->validate();
-        $apple = Apple::findOne($post['id']);
-        if($valid){
-            $eater = new AppleEaterGround();
-            $apple->eat($post['percent'],$eater);
-            $apple->save(false);
-        };
+        $post = Yii::$app->request->post();
+        if (!isset($post['Apple']['id']) || !isset($post['Apple']['percent'])) {
+            throw new \Exception('Не верный post запрос');
+        }
 
-        return $this->renderAjax('eat',[
-            'apple' => $appleRequest
+        $apple = Apple::findOne($post['Apple']['id']);
+        $percent = $post['Apple']['percent'];
+
+        $appleEater = new AppleGroundEater($apple, $post);
+        if($appleEater->eat($percent)){
+            if($apple->percent === 0){
+                AppleDelete::delete($apple);
+                return 'done';
+            }
+        }
+
+        return $this->renderAjax('_appleAction',[
+            'apple' => $apple
         ]);
+
     }
 
     public function actionGenerate()
     {
-        Apple::deleteAll();
-        $appleCount = rand(5, 25);
-        for ($i = 0; $i <= $appleCount; $i++) {
-            $new = new Apple();
-            $new->save(false);
-        }
+        AppleRandomGenerator::generate(10,20);
         $this->redirect('index');
     }
 
